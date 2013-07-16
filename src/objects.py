@@ -5,26 +5,15 @@ from constants import *
 
 
 class Stats():
-    strength,
-    defense,
-    speed,
-    magic,
-    stat_count = range(5)
+    strength, defense, speed, magic, stat_count = range(5)
 
 
 class Vitals():
-    hp,
-    mp,
-    sp,
-    vital_count = range(4)
+    hp, mp, sp, vital_count = range(4)
 
 
 class Equipment():
-    weapon,
-    armor,
-    helmet,
-    shield,
-    equipment_count = range(5)
+    weapon, armor, helmet, shield, equipment_count = range(5)
 
 
 class PlayerInvClass():
