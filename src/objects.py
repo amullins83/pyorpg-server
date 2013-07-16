@@ -3,28 +3,28 @@ from constants import *
 # Public data structures
 # - Initializations are at the bottom of the source code
 
+
 class Stats():
-    strength,  \
-    defense,   \
-    speed,     \
-    magic,     \
-    stat_count \
-    = range(5)
+    strength,
+    defense,
+    speed,
+    magic,
+    stat_count = range(5)
+
 
 class Vitals():
-    hp,         \
-    mp,         \
-    sp,         \
-    vital_count \
-    = range(4)
+    hp,
+    mp,
+    sp,
+    vital_count = range(4)
+
 
 class Equipment():
-    weapon,         \
-    armor,          \
-    helmet,         \
-    shield,         \
-    equipment_count \
-    = range(5)
+    weapon,
+    armor,
+    helmet,
+    shield,
+    equipment_count = range(5)
 
 
 class PlayerInvClass():
@@ -32,6 +32,7 @@ class PlayerInvClass():
         self.num = None
         self.value = 0
         self.dur = 0
+
 
 class PlayerClass():
     def __init__(self):
@@ -69,7 +70,8 @@ class PlayerClass():
         self.Map = 1    # None
         self.x = 5         # None
         self.y = 5         # None
-        self.Dir = 1 # None
+        self.Dir = 1  # None
+
 
 class AccountClass():
     def __init__(self):
@@ -79,6 +81,7 @@ class AccountClass():
 
         # Characters
         self.char = [PlayerClass() for i in range(10)]
+
 
 class ClassClass():
     def __init__(self):
@@ -115,6 +118,7 @@ class TileClass():
         self.data2 = 0
         self.data3 = 0
 
+
 class MapClass():
     def __init__(self):
         self.name = ""
@@ -133,10 +137,12 @@ class MapClass():
 
         self.tile = [[TileClass() for i in range(MAX_MAPY)] for i in range(MAX_MAPX)]
 
+
 class TempTileClass():
     def __init__(self):
         self.doorOpen = 0
         self.doorTime = 0
+
 
 class ItemClass():
     def __init__(self):

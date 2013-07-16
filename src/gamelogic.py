@@ -9,6 +9,7 @@ from utils import *
 
 import globalvars as g
 
+
 def canAttackPlayer(attacker, victim):
     # check attack timer
     if time.time() < TempPlayer[attacker].attackTimer + 1:
@@ -23,7 +24,7 @@ def canAttackPlayer(attacker, victim):
         return False
 
     # make sure we dont attack the player if they are switching maps
-    if TempPlayer[victim].gettingMap == True:
+    if TempPlayer[victim].gettingMap:
         return False
 
     # check if at same coordinates
@@ -64,9 +65,10 @@ def canAttackPlayer(attacker, victim):
 
     return True
 
+
 def attackPlayer(attacker, victim, damage):
     # check for subscript out of range
-    if isPlaying(attacker) == False or isPlaying(victim) == False or damage < 0:
+    if not isPlaying(attacker) or not isPlaying(victim) or damage < 0:
         return
 
     # todo: check weapon
@@ -94,7 +96,7 @@ def playerMove(index, direction, movement):
                 moved = True
         else:
             if Map[getPlayerMap(index)].up > 0:
-                playerWarp(index, Map[getPlayerMap(index)].up, getPlayerX(index), MAX_MAPY - 1) # todo, dont use -1
+                playerWarp(index, Map[getPlayerMap(index)].up, getPlayerX(index), MAX_MAPY - 1)  # todo, dont use -1
                 moved = True
 
     elif direction == DIR_DOWN:
@@ -122,7 +124,7 @@ def playerMove(index, direction, movement):
 
         else:
             if Map[getPlayerMap(index)].left > 0:
-                playerWarp(index, Map[getPlayerMap(index)].left, MAX_MAPX-1, getPlayerY(index)) # todo, dont use -1
+                playerWarp(index, Map[getPlayerMap(index)].left, MAX_MAPX-1, getPlayerY(index))  # todo, dont use -1
                 moved = True
 
     elif direction == DIR_RIGHT:
@@ -136,21 +138,22 @@ def playerMove(index, direction, movement):
 
         else:
             if Map[getPlayerMap(index)].right > 0:
-                playerWarp(index, Map[getPlayerMap(index)].right, 0, getPlayerY(index)) # todo, dont use -1
+                playerWarp(index, Map[getPlayerMap(index)].right, 0, getPlayerY(index))
                 moved = True
 
     # check to see if the tile is a warp tile, and if so warp them
     if Map[getPlayerMap(index)].tile[getPlayerX(index)][getPlayerY(index)].type == TILE_TYPE_WARP:
         mapNum = int(Map[getPlayerMap(index)].tile[getPlayerX(index)][getPlayerY(index)].data1)
-        x      = int(Map[getPlayerMap(index)].tile[getPlayerX(index)][getPlayerY(index)].data2)
-        y      = int(Map[getPlayerMap(index)].tile[getPlayerX(index)][getPlayerY(index)].data3)
+        x = int(Map[getPlayerMap(index)].tile[getPlayerX(index)][getPlayerY(index)].data2)
+        y = int(Map[getPlayerMap(index)].tile[getPlayerX(index)][getPlayerY(index)].data3)
 
         playerWarp(index, mapNum, x, y)
         moved = True
 
-    if moved == False:
+    if not moved:
         # hacking attempt
         g.serverLogger.info("hacking attempt (playerMove)")
+
 
 def playerWarp(index, mapNum, x, y):
     oldMap = getPlayerMap(index)
@@ -197,7 +200,7 @@ def joinGame(index):
     sendInventory(index)
     # worn equipment
 
-    for i in range(0, Vitals.vital_count):  #vital.vital_count -1
+    for i in range(0, Vitals.vital_count):  # vital.vital_count -1
         sendVital(index, i)
 
     sendStats(index)
@@ -237,6 +240,7 @@ def findPlayer(name):
 
     return None
 
+
 def findOpenInvSlot(index, itemNum):
     if not isPlaying(index) or itemNum < 0 or itemNum > MAX_ITEMS:
         return
@@ -249,10 +253,11 @@ def findOpenInvSlot(index, itemNum):
 
     for i in range(0, MAX_INV):
         # try to find an open free slot
-        if getPlayerInvItemNum(index, i) == None:
+        if getPlayerInvItemNum(index, i) is None:
             return i
 
     return None
+
 
 def hasItem(index, itemNum):
     if not isPlaying(index) or itemNum < 0 or itemNum > MAX_ITEMS:
@@ -377,30 +382,30 @@ def createFullMapCache():
 
 def mapCacheCreate(mapNum):
     mapData = []
-    mapData.append({"packet": ServerPackets.SMapData, \
-                    "mapnum": mapNum, \
-                    "mapname": Map[mapNum].name, \
-                    "revision": Map[mapNum].revision, \
-                    "moral": Map[mapNum].moral, \
-                    "tileset": Map[mapNum].tileSet, \
-                    "up": Map[mapNum].up, \
-                    "down": Map[mapNum].down, \
-                    "left": Map[mapNum].left, \
-                    "right": Map[mapNum].right, \
-                    "bootmap": Map[mapNum].bootMap, \
-                    "bootx": Map[mapNum].bootX, \
+    mapData.append({"packet": ServerPackets.SMapData,
+                    "mapnum": mapNum,
+                    "mapname": Map[mapNum].name,
+                    "revision": Map[mapNum].revision,
+                    "moral": Map[mapNum].moral,
+                    "tileset": Map[mapNum].tileSet,
+                    "up": Map[mapNum].up,
+                    "down": Map[mapNum].down,
+                    "left": Map[mapNum].left,
+                    "right": Map[mapNum].right,
+                    "bootmap": Map[mapNum].bootMap,
+                    "bootx": Map[mapNum].bootX,
                     "booty": Map[mapNum].bootY})
 
     for x in range(MAX_MAPX):
         for y in range(MAX_MAPY):
             tempTile = Map[mapNum].tile[x][y]
-            mapData.append([{"ground":    tempTile.ground, \
-                             "mask":      tempTile.mask, \
-                             "animation": tempTile.anim, \
-                             "fringe":    tempTile.fringe, \
-                             "type":      tempTile.type, \
-                             "data1":     tempTile.data1, \
-                             "data2":     tempTile.data2, \
+            mapData.append([{"ground":    tempTile.ground,
+                             "mask":      tempTile.mask,
+                             "animation": tempTile.anim,
+                             "fringe":    tempTile.fringe,
+                             "type":      tempTile.type,
+                             "data1":     tempTile.data1,
+                             "data2":     tempTile.data2,
                              "data3":     tempTile.data3}])
 
     MapCache[mapNum] = mapData
@@ -436,6 +441,7 @@ def sendChars(index):
     nPacket = json.dumps(packet)
     g.conn.sendDataTo(index, nPacket)
 
+
 def sendJoinMap(index):
     g.serverLogger.debug('sendJoinMap()')
     # send data of all players (on current map) to index
@@ -449,19 +455,22 @@ def sendJoinMap(index):
     packet = json.dumps([{"packet": ServerPackets.SPlayerData, "index": index, "name": getPlayerName(index),  "access": getPlayerAccess(index), "sprite": getPlayerSprite(index), "map": getPlayerMap(index), "x": getPlayerX(index), "y": getPlayerY(index), "direction": getPlayerDir(index)}])
     g.conn.sendDataToMap(getPlayerMap(index), packet)
 
+
 def sendVital(index, vital):
-    if vital == 0:   #hp
+    if vital == 0:    # hp
         packet = json.dumps([{"packet": ServerPackets.SPlayerHP, "hp_max": getPlayerMaxVital(index, 0), "hp": getPlayerVital(index, 0)}])
-    elif vital == 1: #mp
+    elif vital == 1:  # mp
         packet = json.dumps([{"packet": ServerPackets.SPlayerMP, "mp_max": getPlayerMaxVital(index, 1), "mp": getPlayerVital(index, 1)}])
-    elif vital == 2: #sp
+    elif vital == 2:  # sp
         packet = json.dumps([{"packet": ServerPackets.SPlayerSP, "sp_max": getPlayerMaxVital(index, 2), "sp": getPlayerVital(index, 2)}])
 
     g.conn.sendDataTo(index, packet)
 
+
 def sendStats(index):
     packet = json.dumps([{"packet": ServerPackets.SPlayerStats, "strength": getPlayerStat(index, 0), "defense": getPlayerStat(index, 1), "speed": getPlayerStat(index, 2), "magic": getPlayerStat(index, 3)}])
     g.conn.sendDataTo(index, packet)
+
 
 def sendWelcome(index):
     playerMsg(index, "Type /help for help on commands. Use arrows keys to move, hold down shift to run, and use ctrl to attack", textColor.CYAN)
@@ -470,6 +479,7 @@ def sendWelcome(index):
         playerMsg(index, "MOTD: " + g.MOTD, textColor.CYAN)
 
     #send whos online
+
 
 def sendClasses(index):
     packet = []
@@ -488,6 +498,7 @@ def sendClasses(index):
 
     nPacket = json.dumps(packet)
     g.conn.sendDataTo(index, nPacket)
+
 
 def sendNewCharClasses(index):
     packet = []
