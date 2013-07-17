@@ -9,9 +9,11 @@ import globalvars as g
 
 database = None
 
+
 def setupDatabase():
     global database
     database = Database(g.dataFolder + "/game_db.db")
+
 
 class Database():
     def __init__(self, database):
@@ -26,7 +28,6 @@ class Database():
         # connect to database
         self.conn = sqlite3.connect(database)
         self.cursor = self.conn.cursor()
-
 
     def createDatabase(self, database_name):
         ''' if the database haven't been created, create it '''
@@ -123,6 +124,7 @@ def accountExists(name):
     else:
         return True
 
+
 def passwordOK(name, password):
     if accountExists(name):
         query = database.sendQuery("SELECT * FROM accounts WHERE username='%s';" % name)
@@ -130,6 +132,7 @@ def passwordOK(name, password):
 
         if password == rows[2]:
             return True
+
 
 def addAccount(index, name, password):
     Player[index].Login = name
@@ -139,9 +142,9 @@ def addAccount(index, name, password):
         clearChar(index, i)
         # add 3
 
-
     saveAccount(name, password)
     savePlayer(index)
+
 
 def deleteName(name):
     print "todo"
@@ -150,9 +153,11 @@ def deleteName(name):
 # CHARACTERS #
 ##############
 
+
 def charExist(index, charNum):
     if len(Player[index].char[charNum].name) > 0:
         return True
+
 
 def addChar(index, name, sex, classNum, charNum):
     if len(Player[index].char[charNum].name) == 0:
@@ -182,6 +187,7 @@ def addChar(index, name, sex, classNum, charNum):
 
         savePlayer(index)
 
+
 def saveChar(index):
     print "todo"
 
@@ -191,29 +197,32 @@ def delChar(index, charNum):
     clearChar(index, charNum)
     savePlayer(index)
 
+
 def findChar(name):
     query = database.sendQuery("SELECT * FROM characters WHERE name='%s';" % name)
     rows = query.fetchone()
 
-    if rows == None:
+    if rows is None:
         return False
-
     else:
         return True
 
 ###########
 # PLAYERS #
 ###########
+
+
 def saveAccount(name, password):
     query = database.sendQuery("INSERT INTO accounts (username, password) VALUES ('%s', '%s');" % (name, password))
     database.saveChanges()
+
 
 def savePlayer(index):
     # check if character/player already exists
     query = database.sendQuery("SELECT * FROM characters WHERE name='%s';" % getPlayerName(index))
     rows = query.fetchone()
 
-    if rows == None:
+    if rows is None:
         # character/player doesnt exist, create it
 
         # get account id
@@ -223,25 +232,25 @@ def savePlayer(index):
 
         # save character
         query = database.sendQuery("INSERT INTO characters (account_id, name, class, sprite, level, exp, access, map, x, y, direction, stats_strength, stats_defense, stats_speed, stats_magic, vital_hp, vital_mp, vital_sp) \
-                                                           VALUES (%i, '%s', %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i);" \
-                                                           % (accountID,                \
-                                                              getPlayerName(index),     \
-                                                              getPlayerClass(index),    \
-                                                              getPlayerSprite(index),   \
-                                                              getPlayerLevel(index),    \
-                                                              getPlayerExp(index),      \
-                                                              getPlayerAccess(index),   \
-                                                              getPlayerMap(index),      \
-                                                              getPlayerX(index),        \
-                                                              getPlayerY(index),        \
-                                                              getPlayerDir(index),      \
-                                                              getPlayerStat(index, 0),  \
-                                                              getPlayerStat(index, 1),  \
-                                                              getPlayerStat(index, 2),  \
-                                                              getPlayerStat(index, 3),  \
-                                                              getPlayerVital(index, 0), \
-                                                              getPlayerVital(index, 1), \
-                                                              getPlayerVital(index, 2)))
+                                                           VALUES (%i, '%s', %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i);"
+                                   % (accountID,
+                                   getPlayerName(index),
+                                   getPlayerClass(index),
+                                   getPlayerSprite(index),
+                                   getPlayerLevel(index),
+                                   getPlayerExp(index),
+                                   getPlayerAccess(index),
+                                   getPlayerMap(index),
+                                   getPlayerX(index),
+                                   getPlayerY(index),
+                                   getPlayerDir(index),
+                                   getPlayerStat(index, 0),
+                                   getPlayerStat(index, 1),
+                                   getPlayerStat(index, 2),
+                                   getPlayerStat(index, 3),
+                                   getPlayerVital(index, 0),
+                                   getPlayerVital(index, 1),
+                                   getPlayerVital(index, 2)))
 
     elif len(rows) > 0:
         # character/player exists, so update the character
@@ -253,25 +262,26 @@ def savePlayer(index):
                                                           direction=%i, \
                                                           stats_strength=%i, stats_defense=%i, stats_speed=%i, stats_magic=%i, \
                                                           vital_hp=%i, vital_mp=%i, vital_sp=%i \
-                                                          WHERE name='%s';" % (getPlayerSprite(index),   \
-                                                                               getPlayerMap(index),      \
-                                                                               getPlayerX(index),        \
-                                                                               getPlayerY(index),        \
-                                                                               getPlayerAccess(index),   \
-                                                                               getPlayerDir(index),      \
-                                                                               getPlayerStat(index, 0),  \
-                                                                               getPlayerStat(index, 1),  \
-                                                                               getPlayerStat(index, 2),  \
-                                                                               getPlayerStat(index, 3),  \
-                                                                               getPlayerVital(index, 0), \
-                                                                               getPlayerVital(index, 1), \
-                                                                               getPlayerVital(index, 2), \
+                                                          WHERE name='%s';" % (getPlayerSprite(index),
+                                                                               getPlayerMap(index),
+                                                                               getPlayerX(index),
+                                                                               getPlayerY(index),
+                                                                               getPlayerAccess(index),
+                                                                               getPlayerDir(index),
+                                                                               getPlayerStat(index, 0),
+                                                                               getPlayerStat(index, 1),
+                                                                               getPlayerStat(index, 2),
+                                                                               getPlayerStat(index, 3),
+                                                                               getPlayerVital(index, 0),
+                                                                               getPlayerVital(index, 1),
+                                                                               getPlayerVital(index, 2),
                                                                                getPlayerName(index)))
 
     database.saveChanges()
 
-''' Load account details from database '''
+
 def loadPlayer(index, name):
+    ''' Load account details from database '''
     clearPlayer(index)
 
     # fetch account details
@@ -314,8 +324,10 @@ def loadPlayer(index, name):
         except:
             break
 
+
 def clearPlayer(index):
     Player[index] = AccountClass()
+
 
 def clearChar(index, charNum):
     Player[index].char[charNum] = PlayerClass()
@@ -324,9 +336,11 @@ def clearChar(index, charNum):
 # CLASSES #
 ###########
 
+
 def createClasses():
     # not necassary?
     maxClasses = 2
+
 
 def loadClasses():
     # get max classes
@@ -337,22 +351,26 @@ def loadClasses():
         rows = query.fetchone()
 
         Class[i].name = rows[1]
-        Class[i].sprite = rows[2] # todo, sprite shouldnt be here
+        Class[i].sprite = rows[2]  # todo, sprite shouldnt be here
         Class[i].stat[Stats.strength] = int(rows[3])
         Class[i].stat[Stats.defense] = int(rows[4])
         Class[i].stat[Stats.speed] = int(rows[5])
         Class[i].stat[Stats.magic] = int(rows[6])
 
+
 def saveClasses():
     # todo
     print "todo"
+
 
 def clearClasses():
     for i in range(g.maxClasses):
         Class[i] = ClassClass()
 
+
 def getClassName(classNum):
     return Class[classNum].name
+
 
 def getClassMaxVital(classNum, vital):
     if vital == Vitals.hp:
@@ -362,12 +380,14 @@ def getClassMaxVital(classNum, vital):
     elif vital == Vitals.sp:
         return (1 + (Class[classNum].stat[Stats.speed] // 2) + Class[classNum].stat[Stats.speed]) * 2
 
+
 def getClassStat(classNum, stat):
     return Class[i].Stat[stat]
 
 #########
 # ITEMS #
 #########
+
 
 def saveItems():
     for i in range(MAX_ITEMS):
@@ -382,17 +402,17 @@ def saveItem(itemNum):
     query = database.sendQuery("SELECT * FROM items WHERE id=%i;" % (itemNum+1))
     rows = query.fetchone()
 
-    if rows == None:
+    if rows is None:
         # item doesnt exist, create it
         query = database.sendQuery("INSERT INTO items (id, name, pic, type, data1, data2, data3) \
-                                                           VALUES (%i, '%s', %i, %i, %i, %i, %i);" \
-                                                           % (int(itemNum+1),             \
-                                                              Item[itemNum].name,  \
-                                                              Item[itemNum].pic,   \
-                                                              Item[itemNum].type,  \
-                                                              Item[itemNum].data1, \
-                                                              Item[itemNum].data2, \
-                                                              Item[itemNum].data3))
+                                                           VALUES (%i, '%s', %i, %i, %i, %i, %i);"
+                                   % (int(itemNum+1),
+                                   Item[itemNum].name,
+                                   Item[itemNum].pic,
+                                   Item[itemNum].type,
+                                   Item[itemNum].data1,
+                                   Item[itemNum].data2,
+                                   Item[itemNum].data3))
 
     elif len(rows) > 0:
         # item already exists, so update the item
@@ -402,12 +422,12 @@ def saveItem(itemNum):
                                                           data1=%i, \
                                                           data2=%i, \
                                                           data3=%i \
-                                                          WHERE id=%i;" % (Item[itemNum].name,  \
-                                                                           Item[itemNum].pic,   \
-                                                                           Item[itemNum].type,  \
-                                                                           Item[itemNum].data1, \
-                                                                           Item[itemNum].data2, \
-                                                                           Item[itemNum].data3, \
+                                                          WHERE id=%i;" % (Item[itemNum].name,
+                                                                           Item[itemNum].pic,
+                                                                           Item[itemNum].type,
+                                                                           Item[itemNum].data1,
+                                                                           Item[itemNum].data2,
+                                                                           Item[itemNum].data3,
                                                                            int(itemNum+1)))
 
     database.saveChanges()
@@ -442,9 +462,11 @@ def checkItems():
 def saveMap(mapNum):
     pickle.dump(Map[mapNum], open(g.dataFolder + "/maps/" + str(mapNum) + ".pom", 'wb'))
 
+
 def saveMaps():
     for i in range(MAX_MAPS):
         saveMap(i)
+
 
 def loadMaps():
     checkMaps()
@@ -452,16 +474,19 @@ def loadMaps():
     for i in range(MAX_MAPS):
         Map[i] = pickle.load(open(g.dataFolder + "/maps/" + str(i) + ".pom", 'rb'))
 
+
 def checkMaps():
     for i in range(MAX_MAPS):
         if not os.path.isfile(g.dataFolder + "/maps/" + str(i) + ".pom"):
             saveMap(i)
+
 
 def clearMap(mapNum):
     Map[mapNum].tileSet = 1
     Map[mapNum].name = ""
     playersOnMap[mapNum] = 0
     MapCache[mapNum] = ""
+
 
 def clearMaps():
     for i in range(MAX_MAPS):
@@ -471,58 +496,70 @@ def clearMaps():
 # PLAYER FUNCTIONS #
 ####################
 
-''' Player login name '''
+
 def getPlayerLogin(index):
+    ''' Player login name '''
     return Player[index].Login
 
 
-''' Player name '''
 def getPlayerName(index):
+    ''' Player name '''
     return Player[index].char[TempPlayer[index].charNum].name
+
 
 def setPlayerName(index, name):
     Player[index].char[TempPlayer[index].charNum].name = name
 
-''' player class '''
+
 def getPlayerClass(index):
+    ''' player class '''
     return Player[index].char[TempPlayer[index].charNum].Class
+
 
 def setPlayerClass(index, classNum):
     Player[index].char[TempPlayer[index].charNum].Class = classNum
 
 
-''' Player sprite '''
 def getPlayerSprite(index):
+    ''' Player sprite '''
     return Player[index].char[TempPlayer[index].charNum].sprite
+
 
 def setPlayerSprite(index, sprite):
     Player[index].char[TempPlayer[index].charNum].sprite = sprite
 
 
-''' player level '''
 def getPlayerLevel(index):
+    ''' player level '''
     return Player[index].char[TempPlayer[index].charNum].level
+
 
 def setPlayerLevel(index, level):
     Player[index].char[TempPlayer[index].charNum].level = level
 
-''' player exp '''
+
 def getPlayerExp(index):
+    ''' player exp '''
     return Player[index].char[TempPlayer[index].charNum].exp
+
 
 def setPlayerExp(index, exp):
     Player[index].char[TempPlayer[index].charNum].exp = exp
 
-''' player access '''
+
 def getPlayerAccess(index):
+    ''' player access '''
     return Player[index].char[TempPlayer[index].charNum].access
+
 
 def setPlayerAccess(index, access):
     Player[index].char[TempPlayer[index].charNum].access = access
 
-''' player vital '''
+
 def getPlayerVital(index, vital):
+    ''' player vital '''
     return Player[index].char[TempPlayer[index].charNum].vitals[vital]
+
 
 def setPlayerVital(index, vital, value):
     Player[index].char[TempPlayer[index].charNum].vitals[vital] = value
@@ -533,81 +570,101 @@ def setPlayerVital(index, vital, value):
     if getPlayerVital(index, vital) < 0:
         Player[index].char[TempPlayer[index].charNum].vitals[vital] = 0
 
-''' player max vital '''
+
 def getPlayerMaxVital(index, vital):
+    ''' player max vital '''
     charNum = TempPlayer[index].charNum
 
     if vital == Vitals.hp:
-        return (Player[index].char[charNum].level + (getPlayerStat(index, Stats.strength)/2)) # + smth
+        return (Player[index].char[charNum].level + (getPlayerStat(index, Stats.strength)/2))  # + smth
     elif vital == Vitals.mp:
-        return (Player[index].char[charNum].level + (getPlayerStat(index, Stats.magic)/2)) # + smth
+        return (Player[index].char[charNum].level + (getPlayerStat(index, Stats.magic)/2))  # + smth
     elif vital == Vitals.sp:
-        return (Player[index].char[charNum].level + (getPlayerStat(index, Stats.speed)/2)) # + smth
+        return (Player[index].char[charNum].level + (getPlayerStat(index, Stats.speed)/2))  # + smth
 
-''' player stats '''
+
 def getPlayerStat(index, stat):
+    ''' player stats '''
     return Player[index].char[TempPlayer[index].charNum].stats[stat]
+
 
 def setPlayerStat(index, stat, value):
     Player[index].char[TempPlayer[index].charNum].stats[stat] = value
 
 
-''' player stats points '''
 def getPlayerPoints(index):
+    ''' player stats points '''
     return Player[index].char[TempPlayer[index].charNum].statsPoints
+
 
 def setPlayerPoints(index, points):
     Player[index].char[TempPlayer[index].charNum].statsPoints = points
 
 
-''' Player map '''
 def getPlayerMap(index):
+    ''' Player map '''
     return Player[index].char[TempPlayer[index].charNum].Map
+
 
 def setPlayerMap(index, mapNum):
     Player[index].char[TempPlayer[index].charNum].Map = mapNum
 
 
-''' Player x '''
 def getPlayerX(index):
+    ''' Player x '''
     return Player[index].char[TempPlayer[index].charNum].x
+
 
 def setPlayerX(index, x):
     Player[index].char[TempPlayer[index].charNum].x = x
 
 
-''' Player y '''
 def getPlayerY(index):
+    ''' Player y '''
     return Player[index].char[TempPlayer[index].charNum].y
+
 
 def setPlayerY(index, y):
     Player[index].char[TempPlayer[index].charNum].y = y
 
 
-''' Player direction '''
 def getPlayerDir(index):
+    ''' Player direction '''
     return Player[index].char[TempPlayer[index].charNum].Dir
+
 
 def setPlayerDir(index, direction):
     Player[index].char[TempPlayer[index].charNum].Dir = direction
 
-''' Player inventory '''
+
 def getPlayerInvItemNum(index, invSlot):
+    ''' Player inventory '''
     return Player[index].char[TempPlayer[index].charNum].inv[invSlot].num
+
+
 def setPlayerInvItemNum(index, invSlot, itemNum):
     Player[index].char[TempPlayer[index].charNum].inv[invSlot].num = itemNum
 
+
 def getPlayerInvItemValue(index, invSlot):
     return Player[index].char[TempPlayer[index].charNum].inv[invSlot].value
+
+
 def setPlayerInvItemValue(index, invSlot, itemValue):
     Player[index].char[TempPlayer[index].charNum].inv[invSlot].value = itemValue
 
+
 def getPlayerInvItemDur(index, invSlot):
     return Player[index].char[TempPlayer[index].charNum].inv[invSlot].dur
+
+
 def setPlayerInvItemDur(index, invSlot, itemDur):
     Player[index].char[TempPlayer[index].charNum].inv[invSlot].dur = itemDur
 
+
 def getPlayerEquipmentSlot(index, equipmentSlot):
     return "todo"
+
+
 def setPlayerEquipmentSlot(index, invNum, equipmentSlot):
     print "todo"

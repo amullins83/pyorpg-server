@@ -33,6 +33,8 @@ MAX_MAPX = 15
 MAX_MAPY = 11
 
 # text colors
+
+
 class textColor():
     BLACK      = (  0,   0,   0)
     WHITE      = (255, 255, 255)

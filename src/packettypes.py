@@ -1,6 +1,7 @@
 SEP_CHAR = "-"
 END_CHAR = "."
 
+
 class ClientPackets:
     CGetClasses, \
     CNewAccount, \
@@ -44,6 +45,7 @@ class ClientPackets:
     CSetMotd, \
     CQuit        \
     = range(41)
+
 
 class ServerPackets:
     SAlertMsg,   \

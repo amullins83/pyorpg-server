@@ -7,7 +7,8 @@ from utils import *
 import globalvars as g
 
 #debug
-import time
+#import time
+
 
 class DataHandler():
     def handleData(self, index, data):
@@ -164,7 +165,6 @@ class DataHandler():
 
             #todo: check for certain letters
 
-
             if charNum < 0 or charNum > MAX_CHARS:
                 print "hacking attempt (handleaddChar() invalid charnum)"
                 return
@@ -192,7 +192,6 @@ class DataHandler():
 
             # send characters to player
             sendChars(index)
-
 
     ''' Player selected character '''
     def handleUseChar(self, index, jsonData):
@@ -265,10 +264,10 @@ class DataHandler():
                 playerMsg(index, 'You have been warped to ' + getPlayerName(playerIndex) + '.', textColor.BRIGHT_BLUE)
                 g.connectionLogger.info(getPlayerName(index) + ' has warped to ' + getPlayerName(playerIndex) + ', map #' + str(getPlayerMap(index)))
             else:
-                playerMsg(index, 'Player is not online.', textColor.RED) # white?
+                playerMsg(index, 'Player is not online.', textColor.RED)  # white?
                 return
         else:
-            playerMsg(index, 'You cannot warp to yourself!', textColor.RED) # white?
+            playerMsg(index, 'You cannot warp to yourself!', textColor.RED)  # white?
             return
 
     def handleWarpToMe(self, index, jsonData):
@@ -286,10 +285,10 @@ class DataHandler():
                 playerMsg(index, getPlayerName(playerIndex) + ' has been summoned.', textColor.BRIGHT_BLUE)
                 g.connectionLogger.info(getPlayerName(index) + ' has warped ' + getPlayerName(playerIndex) + ' to self, map #' + str(getPlayerMap(index)))
             else:
-                playerMsg(index, 'Player is not online.', textColor.RED) # white?
+                playerMsg(index, 'Player is not online.', textColor.RED)  # white?
                 return
         else:
-            playerMsg(index, 'You cannot warp to yourself!', textColor.RED) # white?
+            playerMsg(index, 'You cannot warp to yourself!', textColor.RED)  # white?
             return
 
     def handleWarpTo(self, index, jsonData):
@@ -375,7 +374,6 @@ class DataHandler():
             if isPlaying(index):
                 if getPlayerMap(index) == mapNum:
                     playerWarp(index, mapNum, getPlayerX(index), getPlayerY(index))
-
 
         # todo: ALOT!
 
@@ -473,7 +471,6 @@ class DataHandler():
         plrIndex = findPlayer(plrName)
 
         giveItem(plrIndex, itemNum, 1)
-
 
     def handleQuit(self, index):
         closeConnection(index)

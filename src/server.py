@@ -82,7 +82,7 @@ def loadGameData():
 
 
 class gameServerProtocol(LineReceiver):
-    MAX_LENGTH = 999999 #todo: find a suitable size (see client: sendMap (in clienttcp.py))
+    MAX_LENGTH = 999999  # todo: find a suitable size (see client: sendMap (in clienttcp.py))
 
     def __init__(self, factory):
         self.factory = factory
